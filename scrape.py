@@ -35,6 +35,7 @@ if __name__ == "__main__":
     masks : List[Mask] = []
 
     scrape_authorized_imported_non_niosh_respirators_manufactured_in_china(soup, masks)
+    scrape_no_longer_authorized(soup, masks)
 
     for c in masks:
         print(repr(c))

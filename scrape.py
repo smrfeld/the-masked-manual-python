@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
     scrape_authorized_imported_non_niosh_respirators_manufactured_in_china(soup, masks)
     scrape_no_longer_authorized(soup, masks)
+    scrape_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup, masks)
 
     for c in masks:
         print(repr(c))

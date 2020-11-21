@@ -1,7 +1,7 @@
 from .mask import *
 from typing import List, Any
 
-def scrape_authorized_imported_non_niosh_respirators_manufactured_in_china(soup : Any, masks : List[Mask]):
+def scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(soup : Any, masks : List[Mask]):
 
     for h4 in soup.findAll('h4'):
 
@@ -35,7 +35,7 @@ def scrape_authorized_imported_non_niosh_respirators_manufactured_in_china(soup 
 
                             masks.append(m)
 
-def scrape_no_longer_authorized(soup : Any, masks : List[Mask]):
+def scrape_fda_no_longer_authorized(soup : Any, masks : List[Mask]):
 
     for h4 in soup.findAll('h4'):
 
@@ -73,7 +73,7 @@ def scrape_no_longer_authorized(soup : Any, masks : List[Mask]):
 
                                 masks.append(m)
 
-def scrape_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup : Any, masks : List[Mask]):
+def scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup : Any, masks : List[Mask]):
 
     for h4 in soup.findAll('h4'):
 

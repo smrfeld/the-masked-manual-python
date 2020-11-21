@@ -1,5 +1,20 @@
 import textwrap
 from typing import List
+from enum import Enum
+
+# Note:
+# FDA approval + N95 = surgical N95
+# See definition of surgical N95:
+# https://www.cdc.gov/niosh/npptl/topics/respirators/disp_part/N95list1.html
+class RespiratorType(Enum):
+    UNKNOWN = 0
+    N95 = 1
+    SURGICAL_N95 = 2
+
+class ValveType(Enum):
+    UNKNOWN = 0
+    YES = 1 
+    NO = 2
 
 def remove_newlines(s : str) -> str:
     return s.replace('\n',"").replace('\xa0',"")
@@ -11,12 +26,16 @@ class Mask:
         model : str, 
         niosh_approved: bool, 
         countries_of_origin: List[str], 
-        eua_authorized: bool):
+        eua_authorized: bool,
+        respirator_type: RespiratorType,
+        valve_type: ValveType):
         self.company = remove_newlines(company)
         self.model = remove_newlines(model)
         self.niosh_approved = niosh_approved
         self.countries_of_origin = countries_of_origin
         self.eua_authorized = eua_authorized
+        self.respirator_type = respirator_type
+        self.valve_type = valve_type
 
     @classmethod
     def createAsAuthorizedImportedNonNioshRespiratorsManufacturedInChina(cls, 
@@ -28,7 +47,9 @@ class Mask:
             model=model,
             niosh_approved=False,
             countries_of_origin=countries_of_origin,
-            eua_authorized=True
+            eua_authorized=True,
+            respirator_type=RespiratorType.UNKNOWN,
+            valve_type=ValveType.UNKNOWN
             )
 
     @classmethod
@@ -41,8 +62,25 @@ class Mask:
             model=model,
             niosh_approved=False,
             countries_of_origin=countries_of_origin,
-            eua_authorized=False
+            eua_authorized=False,
+            respirator_type=RespiratorType.UNKNOWN,
+            valve_type=ValveType.UNKNOWN
             )
+
+    @classmethod
+    def createAsNioshApprovedN95(cls,
+        company : str,
+        model : str,
+        valve_type : ValveType):
+        return cls(
+            company=company,
+            model=model,
+            niosh_approved=False,
+            countries_of_origin=[],
+            eua_authorized=False,
+            respirator_type=RespiratorType.N95,
+            valve_type=valve_type
+        )
 
     def __repr__(self): 
         return "%40s: %20s - EUA authorized: %8s - country: %20s" % (

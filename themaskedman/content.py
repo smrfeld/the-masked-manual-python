@@ -1,12 +1,18 @@
 from urllib.request import urlopen
 from pathlib import Path
 
-def get_content_fda_from_web() -> str:
+def _get_content(url: str) -> str:
 
-    url = "https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas"
+    print("Caching: %s ..." % url)
     page = urlopen(url)
     html_bytes = page.read()
     return html_bytes.decode("utf-8")
+
+def get_content_fda_from_web() -> str:
+
+    url = "https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas"
+
+    return _get_content(url)
 
 def get_content_cdc_n95_from_web(letter : str) -> str:
 
@@ -24,10 +30,7 @@ def get_content_cdc_n95_from_web(letter : str) -> str:
     else:
         url += "sect3-" + letter.lower() + ".html"
 
-    print(url)
-    page = urlopen(url)
-    html_bytes = page.read()
-    return html_bytes.decode("utf-8")
+    return _get_content(url)
 
 def write_content_to_cache(content: str, fname: str):
 

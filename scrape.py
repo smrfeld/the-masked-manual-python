@@ -25,7 +25,6 @@ if __name__ == "__main__":
 
     masks : List[Mask] = []
 
-    '''
     content_fda = ""
     if opt_src == "--from-web":
         content_fda = get_content_fda_from_web()
@@ -38,12 +37,12 @@ if __name__ == "__main__":
     scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(soup_fda, masks)
     scrape_fda_no_longer_authorized(soup_fda, masks)
     scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup_fda, masks)
-    '''
 
     # Letters - all alphabetical letters + 3M
     # x,y,z are in one called page yz
     letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','yz']
     letters = ["3M"] + letters
+    # letters = ['a']
     for letter in letters:
 
         content_cdc = ""
@@ -51,10 +50,14 @@ if __name__ == "__main__":
             content_cdc = get_content_cdc_n95_from_web(letter)
             write_content_to_cache(content_cdc, "cache_cdc_%s.html" % letter)
         else:
-            content_cdc = load_content_from_cache("cache_fda_%s.html" % letter)
+            content_cdc = load_content_from_cache("cache_cdc_%s.html" % letter)
 
+        soup_cdc = BeautifulSoup(content_cdc)
+        scrape_niosh_n95(soup_cdc, masks)
 
     for c in masks:
         print(repr(c))
+
+    print("Result: scraped: %d masks!" % len(masks))
 
     write_masks_to_file(masks)

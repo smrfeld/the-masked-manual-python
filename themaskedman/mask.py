@@ -1,5 +1,5 @@
 import textwrap
-from typing import List
+from typing import List, Dict
 from enum import Enum
 
 # Note:
@@ -11,13 +11,26 @@ class RespiratorType(Enum):
     N95 = 1
     SURGICAL_N95 = 2
 
+    def __str__(self):
+        return self.name
+
 class ValveType(Enum):
     UNKNOWN = 0
     YES = 1 
     NO = 2
 
+    def __str__(self):
+        return self.name
+
 def remove_newlines(s : str) -> str:
-    return s.replace('\n',"").replace('\xa0',"")
+    # Note: strip() removes leading and trailing white space
+    return s.replace('\n',"").replace('\xa0',"").strip()
+
+def fix_duplicate_companies(s : str) -> str:
+    if s == "3M Company":
+        return "3M"
+    else:
+        return s
 
 class Mask:
 
@@ -29,7 +42,7 @@ class Mask:
         eua_authorized: bool,
         respirator_type: RespiratorType,
         valve_type: ValveType):
-        self.company = remove_newlines(company)
+        self.company = fix_duplicate_companies(remove_newlines(company))
         self.model = remove_newlines(model)
         self.niosh_approved = niosh_approved
         self.countries_of_origin = countries_of_origin
@@ -71,6 +84,7 @@ class Mask:
     def createAsNioshApprovedN95(cls,
         company : str,
         model : str,
+        respirator_type : RespiratorType,
         valve_type : ValveType):
         return cls(
             company=company,
@@ -78,7 +92,7 @@ class Mask:
             niosh_approved=False,
             countries_of_origin=[],
             eua_authorized=False,
-            respirator_type=RespiratorType.N95,
+            respirator_type=respirator_type,
             valve_type=valve_type
         )
 
@@ -93,8 +107,15 @@ class Mask:
     def __str__(self):
         return "%s: %s" % (self.company, self.model)
 
-    def to_json(self):
-        return {
+    def to_json(self) -> Dict[str,str]:
+        d = {
             'company': self.company,
-            'model': self.model
+            'model': self.model,
+            'niosh_approved': self.niosh_approved,
+            'eua_authorized': self.eua_authorized,
+            'countries_of_origin': self.countries_of_origin,
+            'respirator_type': str(self.respirator_type),
+            'valve_type': str(self.valve_type)
         }
+
+        return d

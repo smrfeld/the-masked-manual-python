@@ -110,6 +110,9 @@ if __name__ == "__main__":
     # Scrape FDA
     read_open_fda(masks, from_cache)
 
+    # Fix duplicates
+    fix_duplicate_companies(masks)
+
     # Print
     print("--- Masks ---")
     for c in masks:

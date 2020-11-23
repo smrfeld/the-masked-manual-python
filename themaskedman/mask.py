@@ -1,3 +1,4 @@
+from os import dup
 import textwrap
 from typing import List, Dict
 from enum import Enum
@@ -31,11 +32,21 @@ def remove_newlines(s : str) -> str:
     # Note: strip() removes leading and trailing white space
     return s.replace('\n',"").replace('\xa0',"").strip()
 
-def fix_duplicate_companies(s : str) -> str:
-    if s == "3M Company":
-        return "3M"
-    else:
-        return s
+def fix_duplicate_companies_manual(s : str) -> str:
+
+    # Duplicates - case does not matter in the list on the RHS
+    duplicates : Dict[str, List[str]] = {}
+    duplicates["ACME AUTOMATIC DISPOSABLE"] = ["ACME FILTER MASK INC."]
+
+    # Ensure lowercase on RHS
+    duplicates = { key: [x.lower() for x in vals] for key,vals in duplicates.items() }
+
+    # Find duplicate
+    for key, vals in duplicates.items():
+        if s.lower() in vals:
+            return key
+
+    return s
 
 class Mask:
 
@@ -46,7 +57,7 @@ class Mask:
         respirator_type: RespiratorType,
         valve_type: ValveType):
 
-        self.company = fix_duplicate_companies(remove_newlines(company))
+        self.company = fix_duplicate_companies_manual(remove_newlines(company))
         self.model = remove_newlines(model)
         self.countries_of_origin = countries_of_origin
         self.respirator_type = respirator_type

@@ -3,13 +3,16 @@ from typing import List, Dict
 from enum import Enum
 
 # Note:
-# FDA approval + N95 = surgical N95
+# FDA approval + respirator N95 = surgical N95 respirator
 # See definition of surgical N95:
 # https://www.cdc.gov/niosh/npptl/topics/respirators/disp_part/N95list1.html
 class RespiratorType(Enum):
-    UNKNOWN = 0
-    N95 = 1
-    SURGICAL_N95 = 2
+    SURGICAL_MASK_EUA = 0
+    SURGICAL_MASK_FDA = 1
+    RESPIRATOR_EUA = 2
+    RESPIRATOR_EUA_EXPIRED_AUTH = 3
+    RESPIRATOR_N95_NIOSH = 4
+    RESPIRATOR_N95_NIOSH_FDA = 5
 
     def __str__(self):
         return self.name
@@ -18,6 +21,7 @@ class ValveType(Enum):
     UNKNOWN = 0
     YES = 1 
     NO = 2
+    NA = 3
 
     def __str__(self):
         return self.name
@@ -37,31 +41,50 @@ class Mask:
     def __init__(self, 
         company : str, 
         model : str, 
-        niosh_approved: bool, 
         countries_of_origin: List[str], 
-        eua_authorized: bool,
         respirator_type: RespiratorType,
         valve_type: ValveType):
+
         self.company = fix_duplicate_companies(remove_newlines(company))
         self.model = remove_newlines(model)
-        self.niosh_approved = niosh_approved
         self.countries_of_origin = countries_of_origin
-        self.eua_authorized = eua_authorized
         self.respirator_type = respirator_type
         self.valve_type = valve_type
 
     @classmethod
-    def createAsAuthorizedImportedNonNioshRespiratorsManufacturedInChina(cls, 
+    def createAsSurgicalMaskEua(cls,
+        company : str, 
+        model : str):
+        return cls(
+            company=company,
+            model=model,
+            countries_of_origin=[],
+            respirator_type=RespiratorType.SURGICAL_MASK_EUA,
+            valve_type=ValveType.NA
+            )
+
+    @classmethod
+    def createAsSurgicalMaskFDA(cls,
+        company : str, 
+        model : str):
+        return cls(
+            company=company,
+            model=model,
+            countries_of_origin=[],
+            respirator_type=RespiratorType.SURGICAL_MASK_FDA,
+            valve_type=ValveType.NA
+            )
+
+    @classmethod
+    def createAsAuthorizedImportedNonNioshRespirators(cls, 
         company : str, 
         model : str,
         countries_of_origin : List[str]):
         return cls(
             company=company,
             model=model,
-            niosh_approved=False,
             countries_of_origin=countries_of_origin,
-            eua_authorized=True,
-            respirator_type=RespiratorType.UNKNOWN,
+            respirator_type=RespiratorType.RESPIRATOR_EUA,
             valve_type=ValveType.UNKNOWN
             )
 
@@ -73,10 +96,8 @@ class Mask:
         return cls(
             company=company,
             model=model,
-            niosh_approved=False,
             countries_of_origin=countries_of_origin,
-            eua_authorized=False,
-            respirator_type=RespiratorType.UNKNOWN,
+            respirator_type=RespiratorType.RESPIRATOR_EUA_EXPIRED_AUTH,
             valve_type=ValveType.UNKNOWN
             )
 
@@ -84,24 +105,26 @@ class Mask:
     def createAsNioshApprovedN95(cls,
         company : str,
         model : str,
-        respirator_type : RespiratorType,
+        fda_approved : bool,
         valve_type : ValveType):
+        if fda_approved:
+            respirator_type = RespiratorType.RESPIRATOR_N95_NIOSH_FDA
+        else:
+            respirator_type = RespiratorType.RESPIRATOR_N95_NIOSH
+
         return cls(
             company=company,
             model=model,
-            niosh_approved=False,
             countries_of_origin=[],
-            eua_authorized=False,
             respirator_type=respirator_type,
             valve_type=valve_type
         )
 
     def __repr__(self): 
-        return "%40s: %20s - EUA authorized: %8s - country: %20s" % (
+        return "%40s: %20s - %30s" % (
             textwrap.shorten(self.company, width=40), 
             textwrap.shorten(self.model, width=20), 
-            textwrap.shorten(str(self.eua_authorized), width=8),
-            textwrap.shorten(','.join(self.countries_of_origin), width=20)
+            textwrap.shorten(str(self.respirator_type), width=30)
             )
 
     def __str__(self):
@@ -111,8 +134,6 @@ class Mask:
         d = {
             'company': self.company,
             'model': self.model,
-            'niosh_approved': self.niosh_approved,
-            'eua_authorized': self.eua_authorized,
             'countries_of_origin': self.countries_of_origin,
             'respirator_type': str(self.respirator_type),
             'valve_type': str(self.valve_type)

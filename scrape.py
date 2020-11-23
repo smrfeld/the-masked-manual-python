@@ -49,6 +49,43 @@ def scrape_cdc(masks: List[Mask], from_cache: bool):
         soup_cdc = BeautifulSoup(content_cdc)
         scrape_cdc_niosh_n95(soup_cdc, masks)
 
+def read_open_fda(masks: List[Mask], from_cache: bool):
+
+    # Download data via query if not from cache
+    if not from_cache:
+
+        api_key = "eMF4aPNcauk5z6cBe455hsczeXcZzl8yM5tN7FMD"
+
+        query = OpenFDAQuery(api_key)
+
+        total_no_records = query.get_total_no_possible_results()
+        print("Total no records: %d" % total_no_records)
+
+        query.run_query(total_no_records)
+
+    # Load cache
+    fname = "cache/cache_open_fda.txt"
+    data = load_open_fda_cache(fname)
+    
+    # Make masks
+    for entry in data:
+        required_fields = ['applicant', 'device_name', 'decision_code']
+        has_all_fields = True
+        for field in required_fields:
+            if not field in entry:
+                print("Warning: could not process an entry because of missing field: %s" % field)
+                has_all_fields = False
+
+        if not has_all_fields:
+            continue
+
+        mask = Mask.createAsSurgicalMaskFDA(
+            company=entry['applicant'],
+            model=entry['device_name'],
+            recalled=entry['decision_code'] == 'SESR'
+            )
+        masks.append(mask)
+
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
@@ -69,10 +106,16 @@ if __name__ == "__main__":
 
     # Scrape CDC
     scrape_cdc(masks, from_cache)
+    
+    # Scrape FDA
+    read_open_fda(masks, from_cache)
 
+    # Print
+    print("--- Masks ---")
     for c in masks:
         print(c)
 
+    print("----------------------------")
     print("Result: scraped: %d masks!" % len(masks))
 
     write_masks_to_file(masks)

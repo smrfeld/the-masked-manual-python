@@ -60,7 +60,7 @@ def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask]):
                     # Third cell = approval number
                     td = td.find_next_sibling("td")
                     if td != None:
-                        approval_number = remove_newlines(td.get_text())
+                        # approval_number = remove_newlines(td.get_text())
 
                         # Fourth cell = yes/no for valve
                         td = td.find_next_sibling("td")

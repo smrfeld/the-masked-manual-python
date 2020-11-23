@@ -9,5 +9,7 @@ def write_masks_to_file(masks: List[Mask]):
     for m in masks:
         data['masks'].append(m.to_json())
 
-    with open('data.txt','w') as outfile:
+    fname = 'data.txt'
+    with open(fname,'w') as outfile:
         json.dump(data,outfile)
+        print("Wrote masks to: %s" % fname)

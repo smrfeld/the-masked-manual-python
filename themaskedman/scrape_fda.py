@@ -19,7 +19,7 @@ def scrape_fda_authorized_surgical_masks(soup : Any, masks : List[Mask]):
                 # First cell = date of addition
                 td = tr.find("td")
                 if td != None:
-                    date = td.get_text()
+                    # date = td.get_text()
 
                     # Second cell = company
                     td = td.find_next_sibling("td")

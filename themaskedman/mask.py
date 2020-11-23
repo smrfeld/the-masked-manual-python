@@ -9,10 +9,11 @@ from enum import Enum
 class RespiratorType(Enum):
     SURGICAL_MASK_EUA = 0
     SURGICAL_MASK_FDA = 1
-    RESPIRATOR_EUA = 2
-    RESPIRATOR_EUA_EXPIRED_AUTH = 3
-    RESPIRATOR_N95_NIOSH = 4
-    RESPIRATOR_N95_NIOSH_FDA = 5
+    SURGICAL_MASK_FDA_POTENTIALLY_RECALLED = 2
+    RESPIRATOR_EUA = 3
+    RESPIRATOR_EUA_EXPIRED_AUTH = 4
+    RESPIRATOR_N95_NIOSH = 5
+    RESPIRATOR_N95_NIOSH_FDA = 6
 
     def __str__(self):
         return self.name
@@ -66,12 +67,18 @@ class Mask:
     @classmethod
     def createAsSurgicalMaskFDA(cls,
         company : str, 
-        model : str):
+        model : str,
+        recalled : bool):
+        if recalled:
+            respirator_type=RespiratorType.SURGICAL_MASK_FDA_POTENTIALLY_RECALLED
+        else:
+            respirator_type=RespiratorType.SURGICAL_MASK_FDA
+        
         return cls(
             company=company,
             model=model,
             countries_of_origin=[],
-            respirator_type=RespiratorType.SURGICAL_MASK_FDA,
+            respirator_type=respirator_type,
             valve_type=ValveType.NA
             )
 
@@ -120,14 +127,14 @@ class Mask:
             valve_type=valve_type
         )
 
-    def __repr__(self): 
-        return "%40s: %20s - %30s" % (
+    def __str__(self):
+        return "%40s: %40s - %40s" % (
             textwrap.shorten(self.company, width=40), 
-            textwrap.shorten(self.model, width=20), 
-            textwrap.shorten(str(self.respirator_type), width=30)
+            textwrap.shorten(self.model, width=40), 
+            textwrap.shorten(str(self.respirator_type), width=40)
             )
 
-    def __str__(self):
+    def __repr__(self): 
         return "%s: %s" % (self.company, self.model)
 
     def to_json(self) -> Dict[str,str]:

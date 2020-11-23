@@ -71,7 +71,7 @@ if __name__ == "__main__":
     scrape_cdc(masks, from_cache)
 
     for c in masks:
-        print(repr(c))
+        print(c)
 
     print("Result: scraped: %d masks!" % len(masks))
 

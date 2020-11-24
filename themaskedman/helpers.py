@@ -1,6 +1,6 @@
 from .mask import Mask
 import json
-from typing import List
+from typing import List, Dict
 
 def write_masks_to_file(masks: List[Mask]):
 
@@ -18,6 +18,33 @@ class Company:
     def __init__(self, name: str, masks: List[Mask]):
         self.name = name
         self.masks = masks
+
+def fix_model_names(masks: List[Mask]):
+
+    words_remove = [
+        "brand",
+        "model"
+    ]
+
+    # Go through all masks
+    for mask in masks:
+
+        # Split name into spaces
+        sp = mask.model.split()
+        i = 0
+        while i < len(sp):
+            
+            if sp[i].lower() == mask.company.lower():
+                # Remove company name
+                del sp[i]
+            elif sp[i].lower() in words_remove:
+                # Remove bad word
+                del sp[i]
+            else:
+                i += 1
+
+        # Set mask name back
+        mask.model = ' '.join(sp)
 
 def fix_duplicate_companies(masks: List[Mask]):
     
@@ -75,7 +102,8 @@ def fix_duplicate_companies(masks: List[Mask]):
         # Next!
         i_company += 1
 
-def _strip_extra_words_in_company_name(s : str):
+def _strip_extra_words_in_company_name(s_in : str) -> str:
+    s = s_in
 
     # Lowercase
     s = s.lower()
@@ -105,7 +133,7 @@ def _strip_extra_words_in_company_name(s : str):
         'limited',
         'coltd',
         'company',
-        '(asia)',
+        'asia',
         'inc',
         'intl',
         'llc',

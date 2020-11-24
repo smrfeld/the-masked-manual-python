@@ -24,7 +24,7 @@ def scrape_fda(masks: List[Mask], from_cache: bool):
         write_content_to_cache(content_fda, "cache_fda.html")
     
     # FDA
-    soup_fda = BeautifulSoup(content_fda)
+    soup_fda = BeautifulSoup(content_fda, features="lxml")
     scrape_fda_authorized_surgical_masks(soup_fda, masks)
     scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(soup_fda, masks)
     scrape_fda_no_longer_authorized(soup_fda, masks)
@@ -46,7 +46,7 @@ def scrape_cdc(masks: List[Mask], from_cache: bool):
             content_cdc = get_content_cdc_n95_from_web(letter)
             write_content_to_cache(content_cdc, "cache_cdc_%s.html" % letter)
         
-        soup_cdc = BeautifulSoup(content_cdc)
+        soup_cdc = BeautifulSoup(content_cdc, features="lxml")
         scrape_cdc_niosh_n95(soup_cdc, masks)
 
 def read_open_fda(masks: List[Mask], from_cache: bool):
@@ -78,11 +78,11 @@ def read_open_fda(masks: List[Mask], from_cache: bool):
 
         if not has_all_fields:
             continue
-
+        
         mask = Mask.createAsSurgicalMaskFDA(
             company=entry['applicant'],
             model=entry['device_name'],
-            recalled=entry['decision_code'] == 'SESR'
+            recalled=(entry['decision_code'] == 'SESR')
             )
         masks.append(mask)
 
@@ -113,8 +113,12 @@ if __name__ == "__main__":
     # Fix duplicates
     fix_duplicate_companies(masks)
 
+    # Fix models
+    fix_model_names(masks)
+
     # Print
     print("--- Masks ---")
+    masks = sorted(masks, key=lambda x: x.company, reverse=False)
     for c in masks:
         print(c)
 

@@ -1,4 +1,3 @@
-from os import dup
 import textwrap
 from typing import List, Dict
 from enum import Enum
@@ -28,25 +27,10 @@ class ValveType(Enum):
     def __str__(self):
         return self.name
 
-def remove_newlines(s : str) -> str:
+def remove_newlines(s_in : str) -> str:
+    s = s_in
     # Note: strip() removes leading and trailing white space
     return s.replace('\n',"").replace('\xa0',"").strip()
-
-def fix_duplicate_companies_manual(s : str) -> str:
-
-    # Duplicates - case does not matter in the list on the RHS
-    duplicates : Dict[str, List[str]] = {}
-    duplicates["ACME AUTOMATIC DISPOSABLE"] = ["ACME FILTER MASK INC."]
-
-    # Ensure lowercase on RHS
-    duplicates = { key: [x.lower() for x in vals] for key,vals in duplicates.items() }
-
-    # Find duplicate
-    for key, vals in duplicates.items():
-        if s.lower() in vals:
-            return key
-
-    return s
 
 class Mask:
 
@@ -57,12 +41,13 @@ class Mask:
         respirator_type: RespiratorType,
         valve_type: ValveType):
 
-        self.company = fix_duplicate_companies_manual(remove_newlines(company))
-        self.model = remove_newlines(model)
+        self.company = fix_phrase(remove_newlines(company))
+        self.model = fix_phrase(remove_newlines(model))
+        
         self.countries_of_origin = countries_of_origin
         self.respirator_type = respirator_type
         self.valve_type = valve_type
-
+        
     @classmethod
     def createAsSurgicalMaskEua(cls,
         company : str, 
@@ -158,3 +143,166 @@ class Mask:
         }
 
         return d
+
+def fix_phrase(s_in : str) -> str:
+    s = s_in
+
+    # Duplicates - case does not matter in the list on the RHS
+    duplicates : Dict[str, List[str]] = {}
+    duplicates["ACME FILTER MASK INC."] = ["ACME AUTOMATIC DISPOSABLE"]
+
+    # Ensure lowercase on RHS
+    duplicates = { key: [x.lower() for x in vals] for key,vals in duplicates.items() }
+
+    # Replace duplicate
+    for key, vals in duplicates.items():
+        if s.lower() in vals:
+            s = key
+    
+    # Also fix small errors
+    nonsense_words = [
+        "fzco",
+        "ltda",
+        "pte",
+        "2000",
+        "kgaa",
+        "m",
+        "i/e",
+        "unltd."
+    ]
+    sp = s.split()
+    i_sp = 0
+    while i_sp < len(sp):
+        if sp[i_sp].lower() in nonsense_words:
+            del sp[i_sp]
+        else:
+            i_sp += 1
+    s = " ".join(sp)
+
+    # Ensure that:
+    # Space always precedes ( and follows )
+    s = s.replace('(',' (').replace(')',') ').replace('  ', ' ')
+
+    # Correct
+    corrected_words = [
+        "Inc.",
+        "Co.",
+        "Ltd.",
+        "LLC",
+        "Medical",
+        "Equipment",
+        "Company",
+        "Protective",
+        "Products",
+        "Audio",
+        "Visual",
+        "International",
+        "Automatic",
+        "Disposable",
+        "Dealers"
+        "Pro",
+        "Tech",
+        "American",
+        "Convertors",
+        "Div.",
+        "Seal",
+        "Threshold",
+        "Healthcare",
+        "Resources",
+        "Surgicals",
+        "Hospital",
+        "Disposables",
+        "Surgical",
+        "Dressings",
+        "Medicines",
+        "Prod.",
+        "Corp."
+        "i/e",
+        "Health",
+        "Creative",
+        "Contract",
+        "Equipments",
+        "Golden",
+        "Leaves",
+        "Development",
+        "Technology",
+        "Tech.",
+        "Sci.",
+        "Intelligent",
+        "Industries",
+        "for",
+        "the",
+        "and",
+        "Blind",
+        "Innovative",
+        "Outsourcing",
+        "Solutions",
+        "Johnson",
+        "Assoc.",
+        "Packaging",
+        "Group",
+        "Incorporated",
+        "Scientific",
+        "Mfg.",
+        "Mining",
+        "Minnesota",
+        "Modern",
+        "Pennsylvania",
+        "Association",
+        "Protect",
+        "Guard",
+        "Filter",
+        "Absorbent",
+        "Cotton",
+        "Automatic",
+        "Disposable",
+        "Mask",
+        "Surgical",
+        "Disposable",
+        "Anti-for",
+        "Face",
+        "Reliable",
+        "Cone",
+        "Protector",
+        "Laser",
+        "Plus",
+        "Dispos.",
+        "Surg.",
+        "Pro",
+        "Certified",
+        "Safety",
+        "China",
+        "Clinical",
+        "Cardiovascular",
+        "Green",
+        "Cross",
+        "Gloves",
+        "Bandage",
+        "Material",
+        "Lancaster",
+        "County",
+        "Textile",
+        "Corp.",
+        "Precision",
+        "Instrument"
+    ]
+    corrected_words_lower = [ x.lower().replace('.','').replace(',','') for x in corrected_words ]
+    sp = s.split()
+    for i, word in enumerate(sp):
+        word_lower = word.lower().replace('.','').replace(',','')
+        
+        if word_lower in corrected_words_lower:
+            idx = corrected_words_lower.index(word_lower)
+            sp[i] = corrected_words[idx]
+            
+        # Capitalize the first letter, no matter what
+        if i == 0:
+            sp[i] = sp[i][0].capitalize() + sp[i][1:]
+
+    s = " ".join(sp)
+
+    # Remove trailing comma
+    if len(s) > 0 and s[-1] == ',':
+        s = s[:-2]
+
+    return s

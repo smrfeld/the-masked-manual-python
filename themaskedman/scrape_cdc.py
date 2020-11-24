@@ -1,5 +1,6 @@
 from .mask import Mask, remove_newlines, ValveType
 from typing import List, Any
+from datetime import date
 
 def _check_obsolete(model: str) -> bool:
     bad_words = ["Inactive", "Obsolete", "Discontinued"]
@@ -30,7 +31,7 @@ def _strip_company(company: str) -> str:
 
     return s
 
-def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask]):
+def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask], date_last_updated: date, url_source: str):
 
     for tbody in soup.findAll('tbody'):
 
@@ -45,6 +46,12 @@ def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask]):
                 # Strip other text in the company name
                 company = _strip_company(company)
 
+                # Get url for company
+                url_company = ""
+                a_url_company = td.find("a", attrs={'class':'tp-link-policy', 'data-domain-ext':"com"}, href=True)
+                if a_url_company != None:
+                    url_company = a_url_company['href']
+
                 # Second cell = models, newline separated
                 # Also may contain bold statements about discontinued!
                 td = td.find_next_sibling("td")
@@ -56,6 +63,17 @@ def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask]):
                     
                     # Remove all extra characters
                     models = [remove_newlines(m) for m in models]
+
+                    # Check for inactive
+                    obsolete = False
+                    for model in models:
+                        if _check_obsolete(model):
+                            obsolete = True
+                            break
+                    
+                    if obsolete:
+                        # Next row in the table
+                        continue
 
                     # Third cell = approval number
                     td = td.find_next_sibling("td")
@@ -80,9 +98,14 @@ def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask]):
                                     obsolete = True
                                     break
 
-                            if obsolete:
-                                models = []
-
+                            # Fifth cell = url to instructions
+                            url_instructions = ""
+                            td = td.find_next_sibling("td")
+                            if td != None:
+                                a_url_instructions = td.find("a", attrs={'class':'tp-link-policy', 'data-domain-ext':"org"}, href=True)
+                                if a_url_instructions != None:
+                                    url_instructions = a_url_instructions['href']
+                                
                             for model in models:
 
                                 # Check FDA
@@ -93,7 +116,11 @@ def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask]):
                                     company=company, 
                                     model=model,
                                     fda_approved=fda,
-                                    valve_type=valve
+                                    valve_type=valve,
+                                    url_company=url_company,
+                                    url_instructions=url_instructions,
+                                    date_last_updated=date_last_updated,
+                                    url_source=url_source
                                     )
 
                                 masks.append(m)

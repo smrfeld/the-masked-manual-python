@@ -1,5 +1,9 @@
 from urllib.request import urlopen
 from pathlib import Path
+from typing import Tuple
+from datetime import date
+import json
+from .helpers import date_to_str, str_to_date
 
 def _get_content(url: str) -> str:
 
@@ -8,13 +12,13 @@ def _get_content(url: str) -> str:
     html_bytes = page.read()
     return html_bytes.decode("utf-8")
 
-def get_content_fda_from_web() -> str:
+def get_content_fda_from_web() -> Tuple[str,str,date]:
 
     url = "https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas"
 
-    return _get_content(url)
+    return (_get_content(url), url, date.today())
 
-def get_content_cdc_n95_from_web(letter : str) -> str:
+def get_content_cdc_n95_from_web(letter : str) -> Tuple[str,str,date]:
 
     url = "https://www.cdc.gov/niosh/npptl/topics/respirators/disp_part/N95list1"
     if letter.lower() == "3m":
@@ -30,20 +34,28 @@ def get_content_cdc_n95_from_web(letter : str) -> str:
     else:
         url += "sect3-" + letter.lower() + ".html"
 
-    return _get_content(url)
+    return (_get_content(url), url, date.today())
 
-def write_content_to_cache(content: str, fname: str):
+def write_scraped_content_to_cache(content: str, url: str, timestamp: date, fname: str):
 
     # Ensure dir exists
     Path('cache/').mkdir(parents=True, exist_ok=True)
 
-    f = open('cache/'+fname,"w")
-    f.write(content)
-    f.close()
+    fname_write = 'cache/'+fname
+    with open(fname_write, 'w') as f:
+        data_write = {
+            "content": content,
+            "url": url,
+            "timestamp": date_to_str(timestamp)
+        }
+        json.dump(data_write, f)
+    print("Wrote to cache: %s" % (fname_write))
 
-def load_content_from_cache(fname: str) -> str:
+def load_scraped_content_from_cache(fname: str) -> Tuple[str,str,date]:
 
-    f = open('cache/'+fname, 'r')
-    content = f.read()
-    f.close()
-    return content
+    fname_read = 'cache/'+fname
+    with open(fname_read, 'r') as f:
+        data = json.load(f)
+    
+    print("Read data from cache: %s" % fname_read)
+    return (data["content"],data["url"],str_to_date(data["timestamp"]))

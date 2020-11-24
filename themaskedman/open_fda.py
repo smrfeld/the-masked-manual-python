@@ -1,19 +1,43 @@
+from os import times
+from time import time
 import requests
 import json
-from typing import Any, List
+from typing import Any, Tuple
 from pathlib import Path
-from .mask import Mask
+from datetime import date
+from .helpers import date_to_str, str_to_date
+
+def write_queried_content_to_cache(content: Any, url: str, timestamp: date, fname: str):
+
+    # Ensure dir exists
+    Path('cache/').mkdir(parents=True, exist_ok=True)
+
+    fname_write = 'cache/'+fname
+    with open(fname_write, 'w') as f:
+        data_write = {
+            "content": content,
+            "url": url,
+            "timestamp": date_to_str(timestamp)
+        }
+        json.dump(data_write, f)
+    print("Wrote to cache: %s" % (fname_write))
+
+def load_queried_content_from_cache(fname: str) -> Tuple[Any,str,date]:
+
+    fname_read = 'cache/'+fname
+    with open(fname_read, 'r') as f:
+        data = json.load(f)
+    
+    print("Read data from cache: %s" % fname_read)
+    return (data["content"],data["url"],str_to_date(data["timestamp"]))
 
 class OpenFDAQuery:
 
     def __init__(self, api_key : str):
 
-        self.cache_dir = "cache"
-        Path(self.cache_dir).mkdir(parents=True, exist_ok=True)
-
         self.api_key = api_key
         
-    def run_query(self, limit : int):
+    def run_query(self, limit : int) -> Tuple[Any,str,date]:
 
         limit_each_query = 1000
         skip = 0
@@ -31,17 +55,13 @@ class OpenFDAQuery:
             # Advance
             skip += limit_each_query
 
-        # Write to cache
-        fname = self.cache_dir + ('/cache_open_fda.txt')
-        with open(fname, 'w') as outfile:
-            print("Wrote to cache: %s" % fname)
-            json.dump(results, outfile)
-        
         '''
         print("Applicants:")
         for res in data['results']:
             print('   %s' % res['applicant'])
         '''
+
+        return (results, "https://open.fda.gov", date.today())
 
     def get_total_no_possible_results(self) -> int:
 
@@ -140,8 +160,3 @@ class OpenFDAQuery:
                 if "fei_number" in res["openfda"]:
                     del res["openfda"]["fei_number"]
                     data['results'][i_res] = res
-
-def load_open_fda_cache(fname : str) -> Any:
-    with open(fname, 'r') as f:
-        data = json.load(f)
-    return data

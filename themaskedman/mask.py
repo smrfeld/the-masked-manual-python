@@ -1,6 +1,9 @@
 import textwrap
 from typing import List, Dict
 from enum import Enum
+from datetime import date
+import json
+from .helpers import date_to_str, str_to_date
 
 # Note:
 # FDA approval + respirator N95 = surgical N95 respirator
@@ -39,7 +42,12 @@ class Mask:
         model : str, 
         countries_of_origin: List[str], 
         respirator_type: RespiratorType,
-        valve_type: ValveType):
+        valve_type: ValveType,
+        url_company: str,
+        url_instructions: str,
+        url_source: str,
+        date_last_updated: date
+        ):
 
         self.company = fix_phrase(remove_newlines(company))
         self.model = fix_phrase(remove_newlines(model))
@@ -47,24 +55,38 @@ class Mask:
         self.countries_of_origin = countries_of_origin
         self.respirator_type = respirator_type
         self.valve_type = valve_type
+
+        self.url_company = url_company
+        self.url_instructions = url_instructions
+        self.url_source = url_source
+
+        self.date_last_updated = date_last_updated
         
     @classmethod
     def createAsSurgicalMaskEua(cls,
         company : str, 
-        model : str):
+        model : str,
+        url_source : str,
+        date_last_updated : date):
         return cls(
             company=company,
             model=model,
             countries_of_origin=[],
             respirator_type=RespiratorType.SURGICAL_MASK_EUA,
-            valve_type=ValveType.NA
+            valve_type=ValveType.NA,
+            url_company="",
+            url_instructions="",
+            url_source=url_source,
+            date_last_updated=date_last_updated
             )
 
     @classmethod
     def createAsSurgicalMaskFDA(cls,
         company : str, 
         model : str,
-        recalled : bool):
+        recalled : bool,
+        url_source : str,
+        date_last_updated : date):
         if recalled:
             respirator_type=RespiratorType.SURGICAL_MASK_FDA_POTENTIALLY_RECALLED
         else:
@@ -75,33 +97,49 @@ class Mask:
             model=model,
             countries_of_origin=[],
             respirator_type=respirator_type,
-            valve_type=ValveType.NA
+            valve_type=ValveType.NA,
+            url_company="",
+            url_instructions="",
+            url_source=url_source,
+            date_last_updated=date_last_updated
             )
 
     @classmethod
     def createAsAuthorizedImportedNonNioshRespirators(cls, 
         company : str, 
         model : str,
-        countries_of_origin : List[str]):
+        countries_of_origin : List[str],
+        url_source : str,
+        date_last_updated : date):
         return cls(
             company=company,
             model=model,
             countries_of_origin=countries_of_origin,
             respirator_type=RespiratorType.RESPIRATOR_EUA,
-            valve_type=ValveType.UNKNOWN
+            valve_type=ValveType.UNKNOWN,
+            url_company="",
+            url_instructions="",
+            url_source=url_source,
+            date_last_updated=date_last_updated
             )
 
     @classmethod
     def createAsNoLongerAuthorized(cls, 
         company : str, 
         model : str,
-        countries_of_origin : List[str]):
+        countries_of_origin : List[str],
+        url_source : str,
+        date_last_updated : date):
         return cls(
             company=company,
             model=model,
             countries_of_origin=countries_of_origin,
             respirator_type=RespiratorType.RESPIRATOR_EUA_EXPIRED_AUTH,
-            valve_type=ValveType.UNKNOWN
+            valve_type=ValveType.UNKNOWN,
+            url_company="",
+            url_instructions="",
+            url_source=url_source,
+            date_last_updated=date_last_updated
             )
 
     @classmethod
@@ -109,7 +147,11 @@ class Mask:
         company : str,
         model : str,
         fda_approved : bool,
-        valve_type : ValveType):
+        valve_type : ValveType,
+        url_company : str,
+        url_instructions : str,
+        url_source : str,
+        date_last_updated : date):
         if fda_approved:
             respirator_type = RespiratorType.RESPIRATOR_N95_NIOSH_FDA
         else:
@@ -120,7 +162,11 @@ class Mask:
             model=model,
             countries_of_origin=[],
             respirator_type=respirator_type,
-            valve_type=valve_type
+            valve_type=valve_type,
+            url_company=url_company,
+            url_instructions=url_instructions,
+            url_source=url_source,
+            date_last_updated=date_last_updated
         )
 
     def __str__(self):
@@ -139,7 +185,11 @@ class Mask:
             'model': self.model,
             'countries_of_origin': self.countries_of_origin,
             'respirator_type': str(self.respirator_type),
-            'valve_type': str(self.valve_type)
+            'valve_type': str(self.valve_type),
+            'url_instructions': self.url_instructions,
+            'url_company': self.url_company,
+            'url_source': self.url_source,
+            'date_last_updated': date_to_str(self.date_last_updated)
         }
 
         return d
@@ -284,7 +334,9 @@ def fix_phrase(s_in : str) -> str:
         "Textile",
         "Corp.",
         "Precision",
-        "Instrument"
+        "Instrument",
+        "Center",
+        "Associates"
     ]
     corrected_words_lower = [ x.lower().replace('.','').replace(',','') for x in corrected_words ]
     sp = s.split()
@@ -306,3 +358,42 @@ def fix_phrase(s_in : str) -> str:
         s = s[:-2]
 
     return s
+
+def write_masks_to_file(masks: List[Mask]):
+
+    data = {}
+    data['masks'] = []
+    for m in masks:
+        data['masks'].append(m.to_json())
+
+    fname = 'data.txt'
+    with open(fname,'w') as outfile:
+        json.dump(data,outfile)
+        print("Wrote masks to: %s" % fname)
+
+def fix_model_names(masks: List[Mask]):
+
+    words_remove = [
+        "brand",
+        "model"
+    ]
+
+    # Go through all masks
+    for mask in masks:
+
+        # Split name into spaces
+        sp = mask.model.split()
+        i = 0
+        while i < len(sp):
+            
+            if sp[i].lower() == mask.company.lower():
+                # Remove company name
+                del sp[i]
+            elif sp[i].lower() in words_remove:
+                # Remove bad word
+                del sp[i]
+            else:
+                i += 1
+
+        # Set mask name back
+        mask.model = ' '.join(sp)

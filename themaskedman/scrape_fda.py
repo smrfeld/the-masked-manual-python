@@ -1,7 +1,12 @@
 from .mask import Mask, remove_newlines, ValveType
 from typing import List, Any
+from datetime import date
 
-def scrape_fda_authorized_surgical_masks(soup : Any, masks : List[Mask]):
+def scrape_fda_authorized_surgical_masks(
+    soup : Any, 
+    masks : List[Mask], 
+    date_last_updated: date, 
+    url_source: str):
 
     for h4 in soup.findAll('h4'):
 
@@ -61,12 +66,18 @@ def scrape_fda_authorized_surgical_masks(soup : Any, masks : List[Mask]):
 
                                 m = Mask.createAsSurgicalMaskEua(
                                     company=company, 
-                                    model=model
+                                    model=model,
+                                    date_last_updated=date_last_updated,
+                                    url_source=url_source
                                     )
 
                                 masks.append(m)
 
-def scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(soup : Any, masks : List[Mask]):
+def scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(
+    soup : Any, 
+    masks : List[Mask], 
+    date_last_updated: date, 
+    url_source: str):
 
     for h4 in soup.findAll('h4'):
 
@@ -95,12 +106,18 @@ def scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(s
                             m = Mask.createAsAuthorizedImportedNonNioshRespirators(
                                 company=company, 
                                 model=model,
-                                countries_of_origin=["China"]
+                                countries_of_origin=["China"],
+                                date_last_updated=date_last_updated,
+                                url_source=url_source
                                 )
 
                             masks.append(m)
 
-def scrape_fda_no_longer_authorized(soup : Any, masks : List[Mask]):
+def scrape_fda_no_longer_authorized(
+    soup : Any, 
+    masks : List[Mask], 
+    date_last_updated: date, 
+    url_source: str):
 
     for h4 in soup.findAll('h4'):
 
@@ -133,12 +150,18 @@ def scrape_fda_no_longer_authorized(soup : Any, masks : List[Mask]):
                                 m = Mask.createAsNoLongerAuthorized(
                                     company=company, 
                                     model=model,
-                                    countries_of_origin=["China"]
+                                    countries_of_origin=["China"],
+                                    date_last_updated=date_last_updated,
+                                    url_source=url_source
                                     )
 
                                 masks.append(m)
 
-def scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup : Any, masks : List[Mask]):
+def scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(
+    soup : Any, 
+    masks : List[Mask], 
+    date_last_updated: date, 
+    url_source: str):
 
     for h4 in soup.findAll('h4'):
 
@@ -173,7 +196,9 @@ def scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_resp
                                 m = Mask.createAsAuthorizedImportedNonNioshRespirators(
                                     company=company, 
                                     model=model,
-                                    countries_of_origin=countries.split(',')
+                                    countries_of_origin=countries.split(','),
+                                    date_last_updated=date_last_updated,
+                                    url_source=url_source
                                     )
                                 
                                 masks.append(m)

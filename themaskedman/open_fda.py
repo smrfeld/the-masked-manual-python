@@ -1,34 +1,26 @@
-from os import times
-from time import time
 import requests
 import json
 from typing import Any, Tuple
-from pathlib import Path
 from datetime import date
 from .helpers import date_to_str, str_to_date
 
 def write_queried_content_to_cache(content: Any, url: str, timestamp: date, fname: str):
 
-    # Ensure dir exists
-    Path('cache/').mkdir(parents=True, exist_ok=True)
-
-    fname_write = 'cache/'+fname
-    with open(fname_write, 'w') as f:
+    with open(fname, 'w') as f:
         data_write = {
             "content": content,
             "url": url,
             "timestamp": date_to_str(timestamp)
         }
         json.dump(data_write, f)
-    print("Wrote to cache: %s" % (fname_write))
+    print("Wrote to cache: %s" % (fname))
 
 def load_queried_content_from_cache(fname: str) -> Tuple[Any,str,date]:
 
-    fname_read = 'cache/'+fname
-    with open(fname_read, 'r') as f:
+    with open(fname, 'r') as f:
         data = json.load(f)
     
-    print("Read data from cache: %s" % fname_read)
+    print("Read data from cache: %s" % fname)
     return (data["content"],data["url"],str_to_date(data["timestamp"]))
 
 class OpenFDAQuery:

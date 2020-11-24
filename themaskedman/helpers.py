@@ -46,15 +46,15 @@ def fix_duplicate_companies(masks: List[Mask]):
         ni = ci.name
 
         # Check every other company name
-        print("Checking company: %s" % ci.name)
+        print("Findind duplicates for: %s" % ci.name)
         j_company = i_company + 1
         while j_company < len(companies):
             cj = companies[j_company]
             nj = cj.name
 
             # Strip periods, commas, lowercase
-            ni = strip_extra(ni)
-            nj = strip_extra(nj)
+            ni = _strip_extra_words_in_company_name(ni)
+            nj = _strip_extra_words_in_company_name(nj)
 
             # Check for match
             if ni == nj:
@@ -64,7 +64,7 @@ def fix_duplicate_companies(masks: List[Mask]):
                 # Match!
                 # Fix all mask names in cj masks
                 for mask in cj.masks:
-                    mask.company = ni
+                    mask.company = ci.name
 
                 # Delete company
                 del companies[j_company]
@@ -75,17 +75,22 @@ def fix_duplicate_companies(masks: List[Mask]):
         # Next!
         i_company += 1
 
-def strip_extra(s : str):
+def _strip_extra_words_in_company_name(s : str):
+
     # Lowercase
     s = s.lower()
 
-    # Commas, periods
-    s = s.replace('.','').replace(',','')
+    # Commas, periods, paretheses
+    # Replace with spaces to fix problems such as co.ltd. -> co ltd
+    s = s.replace('.',' ').replace(',',' ').replace('(',' ').replace(')',' ').replace('[',' ').replace(']',' ').replace('&',' ')
 
     # International
     phrases_remove = [
         'health care',
-        'automatic disposable'
+        'automatic disposable',
+        'professional products',
+        'safety products',
+        'filter technologies'
     ]
     for phrase in phrases_remove:
         s = s.replace(phrase, '')
@@ -97,12 +102,33 @@ def strip_extra(s : str):
         'international',
         'co',
         'ltd',
+        'limited',
         'coltd',
         'company',
-        '(asia)'
+        '(asia)',
+        'inc',
+        'intl',
+        'llc',
+        'medical',
+        'corp',
+        'corporation',
+        'and',
+        'japan',
+        'health',
+        'safety',
+        'trading',
+        'america',
+        'ag'
     ]
     sp = s.split()
     sp = [x for x in sp if not x in words_cut]
+    s = ' '.join(sp)
+
+    # Strip words after aka
+    sp = s.split()
+    if 'aka' in sp:
+        idx = sp.index('aka')
+        sp = sp[:idx]
     s = ' '.join(sp)
 
     # Fix double spaces

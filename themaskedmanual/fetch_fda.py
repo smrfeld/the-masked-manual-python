@@ -2,7 +2,7 @@ from .mask import Mask, remove_newlines, ValveType
 from typing import List, Any
 from datetime import date
 
-def scrape_fda_authorized_surgical_masks(
+def fetch_fda_authorized_surgical_masks(
     soup : Any, 
     masks : List[Mask], 
     date_last_updated: date, 
@@ -73,7 +73,7 @@ def scrape_fda_authorized_surgical_masks(
 
                                 masks.append(m)
 
-def scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(
+def fetch_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(
     soup : Any, 
     masks : List[Mask], 
     date_last_updated: date, 
@@ -113,7 +113,7 @@ def scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(
 
                             masks.append(m)
 
-def scrape_fda_no_longer_authorized(
+def fetch_fda_no_longer_authorized(
     soup : Any, 
     masks : List[Mask], 
     date_last_updated: date, 
@@ -157,7 +157,7 @@ def scrape_fda_no_longer_authorized(
 
                                 masks.append(m)
 
-def scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(
+def fetch_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(
     soup : Any, 
     masks : List[Mask], 
     date_last_updated: date, 

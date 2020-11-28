@@ -31,7 +31,7 @@ def _strip_company(company: str) -> str:
 
     return s
 
-def scrape_cdc_niosh_n95(soup : Any, masks : List[Mask], date_last_updated: date, url_source: str):
+def fetch_cdc_niosh_n95(soup : Any, masks : List[Mask], date_last_updated: date, url_source: str):
 
     for tbody in soup.findAll('tbody'):
 

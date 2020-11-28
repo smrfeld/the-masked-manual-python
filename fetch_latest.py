@@ -14,7 +14,7 @@ def get_letters_cdc() -> List[str]:
 
 def print_help_and_exit():
     print("Usage:")
-    print("python scrape [OPTIONS]")
+    print("python fetch_latest [OPTIONS]")
     print("")
     print("OPTIONS:")
     print("--from-web")
@@ -26,12 +26,12 @@ def get_content_from_web(cache : Cache):
 
     # FDA
     content, url, timestamp = get_content_fda_from_web()
-    write_scraped_content_to_cache(content, url, timestamp, cache.get_cache_fname_fda())
+    write_fetched_content_to_cache(content, url, timestamp, cache.get_cache_fname_fda())
 
     # CDC NIOSH
     for letter in get_letters_cdc():
         content, url, timestamp = get_content_cdc_n95_from_web(letter)
-        write_scraped_content_to_cache(content, url, timestamp, cache.get_cache_fname_cdc(letter))
+        write_fetched_content_to_cache(content, url, timestamp, cache.get_cache_fname_cdc(letter))
 
     # Open FDA
     api_key = "eMF4aPNcauk5z6cBe455hsczeXcZzl8yM5tN7FMD"
@@ -43,27 +43,27 @@ def get_content_from_web(cache : Cache):
     content, url, timestamp = query.run_query(total_no_records)
     write_queried_content_to_cache(content, url, timestamp, cache.get_cache_fname_open_fda())
 
-def scrape_fda(masks: List[Mask], cache : Cache):
+def fetch_fda(masks: List[Mask], cache : Cache):
 
     # Load content
-    content_fda, url, timestamp = load_scraped_content_from_cache(cache.get_cache_fname_fda())
+    content_fda, url, timestamp = load_fetched_content_from_cache(cache.get_cache_fname_fda())
     
     # FDA
     soup_fda = BeautifulSoup(content_fda, features="lxml")
-    scrape_fda_authorized_surgical_masks(soup_fda, masks, timestamp, url)
-    scrape_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(soup_fda, masks, timestamp, url)
-    scrape_fda_no_longer_authorized(soup_fda, masks, timestamp, url)
-    scrape_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup_fda, masks, timestamp, url)
+    fetch_fda_authorized_surgical_masks(soup_fda, masks, timestamp, url)
+    fetch_fda_authorized_imported_non_niosh_respirators_manufactured_in_china(soup_fda, masks, timestamp, url)
+    fetch_fda_no_longer_authorized(soup_fda, masks, timestamp, url)
+    fetch_fda_authorized_imported_non_niosh_disposable_filtering_facepiece_respirators(soup_fda, masks, timestamp, url)
 
-def scrape_cdc(masks: List[Mask], cache : Cache):
+def fetch_cdc(masks: List[Mask], cache : Cache):
 
     for letter in get_letters_cdc():
 
         # Load content
-        content_cdc, url, timestamp = load_scraped_content_from_cache(cache.get_cache_fname_cdc(letter))
+        content_cdc, url, timestamp = load_fetched_content_from_cache(cache.get_cache_fname_cdc(letter))
         
         soup_cdc = BeautifulSoup(content_cdc, features="lxml")
-        scrape_cdc_niosh_n95(soup_cdc, masks, timestamp, url)
+        fetch_cdc_niosh_n95(soup_cdc, masks, timestamp, url)
 
 def read_open_fda(masks: List[Mask], cache : Cache):
     
@@ -118,13 +118,13 @@ if __name__ == "__main__":
 
     masks : List[Mask] = []
 
-    # Scrape FDA
-    scrape_fda(masks, cache)
+    # fetch FDA
+    fetch_fda(masks, cache)
 
-    # Scrape CDC
-    scrape_cdc(masks, cache)
+    # fetch CDC
+    fetch_cdc(masks, cache)
     
-    # Scrape FDA
+    # fetch FDA
     read_open_fda(masks, cache)
 
     # Fix duplicates
@@ -140,6 +140,6 @@ if __name__ == "__main__":
         print(c)
 
     print("----------------------------")
-    print("Result: scraped: %d masks!" % len(masks))
+    print("Result: fetched: %d masks!" % len(masks))
 
     write_masks_to_file(masks)

@@ -6,3 +6,4 @@ from .open_fda import *
 from .fetch_fda import *
 from .fetch_cdc import *
 from .companies import *
+from .upload import *

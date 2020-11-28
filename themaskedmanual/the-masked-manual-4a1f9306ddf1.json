@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "the-masked-manual",
+  "private_key_id": "4a1f9306ddf1b680d30e6ba86b7c5396463a2c81",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCYgEcMOyeijG5z\n1AJ7I7T2QpNLairwWZNdKiscq8l+1KayvUm1DKaJmm9xexCicVgj5qz3OFhUuM6U\nNAjwkX9JXGLvCkJxfGEfv26i2OnisQUBvkr48E+gvm9X2GoKfqnbowEafZVxX20L\nqDB2xGx8y6m5H+/jy14lbKuekrMRZVGmqkbpxiupAwbrA//D7N4h/iDuT8TUT4c8\nowteWL7C9P+zyl2AmIknxw6iH+1dbF91I+d9kUCss70AFj/bsOCf7NPdltRoD1oI\nUSOUk+JRyduxrGU2M/zb6pkBXues2A1lPF2hxxyALsZ1O0fkGRAQmqxiJeQPO6/H\nAG3m6D5HAgMBAAECggEACcCSSo7x3uw6GAAj1HoZFXJ2dukoK8yepuOOdDvsG8c/\njcibEQ/pCn2syMYE705uQ4V55ClfRLO4yjN1quSzDh7xWLYAP7+jemNEkPdsJYoK\ndu0TYE4F2ZK0DhsR1O/6rsgCxw3m46QllgxAZSf0hBqGFQec0KVttNj5NJ/PAbqu\nqXmPNkSlcNxCvPJMzdfeh/fBjyhdazb4DOp64m8vFnp9vcQjKgTa8AhRtrnJMWYn\nnzaAn27vZDl9hz3CEIPwYxfa8BESaqmuTIAi6lEjnlCVj7MoBZcqwIwuFELTZ7oV\nSp4uAhwNSdNtSJcA9aSNPEllmjpvScmUmklDe6x9yQKBgQDQ+RMAKIapguEIIag8\nUQanGQJQC5Tg+g90PXN1yY7YcvMF/EkqCBM0HGDHQzJ1UZnxwJGGI8IoVU3kKsLA\nKpoLPMKJISFifYxHQdnB8QG2SEHGbRc4gNuUdw+LtMA6nBA0U/r+ql9figYzXIJq\nv2eFwMI8MHag9N7Y8U/OLx250wKBgQC60dxhdXPQPlcKQe871dAkG/aH1diaNjfP\nz++kbf8h46v078URnwCKMZ85UaRbcqo8Ba7LRew+FMNhbpENU8D01+Fq7ovk5Beh\nVSFZyufA7jcIe/D/8yZrtbvsGqjWFGpzUih4yXeIzczCfwThA181HFBKWGi9j7Yu\nIYCgZMfNPQKBgCh+CvN95tIT3TzxIKNHZA2e5/bQt7F8YuA4RBYvzzEb3QFs6FRv\nqiDv2sThvXZEMJtKoCgo56dfGC+9JW2NE7pXtK5TsB9gin0IQoS1CYrjp3MmklhN\nh77V7zo39QOmV/F70GfmZYKiwR7UryS2H/4n4rs8/M+lg0TwRXGDabQnAoGAY3o2\nAEs7ZQqc7GBZlCHxGBkvt/rdwJfYNjcB4yuTLCeAPAekhxKEhhGQOERJ4Uv4a8eW\n4LSV7CTAONRYNqF/YKDHblohcbsm/ghHnvmVWD1AXqsolBGURsxZiYpUltH+MPPx\niwe0N8tmGbbrESnre2tdMYlMFIw+tOewBzhCz/0CgYB/HUV97SmVVp5PqOZi56Sq\nIo81Uwwfp+Osj3rvr+CH/88qH0m3wUd7GDhqb+pVM8+lVzEKUR/bo8SFmEg9MmJf\nb5C91k59bsEK9OQnmIngCiJWMCRHreoD8lDzGBtkRyUjgIJCjP2lev1EJJnyh3o9\nRB4NquBNmySLOsCNrZk2Og==\n-----END PRIVATE KEY-----\n",
+  "client_email": "heroku-uploader@the-masked-manual.iam.gserviceaccount.com",
+  "client_id": "109558462678627339852",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/heroku-uploader%40the-masked-manual.iam.gserviceaccount.com"
+}

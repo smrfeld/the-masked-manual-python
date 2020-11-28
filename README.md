@@ -1,5 +1,9 @@
 # The Masked Manual - Python backend
 
+## Google Cloud Storage Python interface
+
+[Documentation can be found here.](https://googleapis.dev/python/storage/latest/index.html)
+
 ## Flask
 
 ```

@@ -119,4 +119,8 @@ def fetch_latest(from_cache : bool):
     print("----------------------------")
     print("Result: fetched: %d masks!" % len(masks))
 
+    # Write to file
     write_masks_to_file(masks)
+
+    # Upload to google cloud storage
+    upload_to_google_cloud_storage()

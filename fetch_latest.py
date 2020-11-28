@@ -1,4 +1,4 @@
-from manmask import *
+from themaskedmanual import *
 
 from bs4 import BeautifulSoup
 from typing import List

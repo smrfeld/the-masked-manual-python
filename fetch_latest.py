@@ -34,8 +34,7 @@ def get_content_from_web(cache : Cache):
         write_fetched_content_to_cache(content, url, timestamp, cache.get_cache_fname_cdc(letter))
 
     # Open FDA
-    api_key = "eMF4aPNcauk5z6cBe455hsczeXcZzl8yM5tN7FMD"
-    query = OpenFDAQuery(api_key)
+    query = OpenFDAQuery(api_key=None)
 
     total_no_records = query.get_total_no_possible_results()
     print("Total no records: %d" % total_no_records)

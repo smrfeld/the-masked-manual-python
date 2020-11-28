@@ -1,6 +1,6 @@
 import requests
 import json
-from typing import Any, Tuple
+from typing import Any, Tuple, Union
 from datetime import date
 from .helpers import date_to_str, str_to_date
 
@@ -25,7 +25,7 @@ def load_queried_content_from_cache(fname: str) -> Tuple[Any,str,date]:
 
 class OpenFDAQuery:
 
-    def __init__(self, api_key : str):
+    def __init__(self, api_key : Union[str,None]):
 
         self.api_key = api_key
         
@@ -77,8 +77,14 @@ class OpenFDAQuery:
 
         # Api Key
         params = ""
-        params += "api_key=%s" % self.api_key
-        params += "&search="
+
+        if self.api_key != None:
+            # With api key
+            params += "api_key=%s" % self.api_key
+            params += "&search="
+        else:
+            # No API key
+            params += "search="
 
         # Replace commas, spaces
         # See here:

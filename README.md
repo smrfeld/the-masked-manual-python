@@ -1,4 +1,16 @@
-# Mask and respirator types
+# The Masked Manual - Python backend
+
+## Flask
+
+```
+export FLASK_APP=app
+export FLASK_ENV=development
+flask run
+```
+
+The latest data is served on `data_latest`.
+
+## Mask and respirator types
 
 * `SURGICAL_MASK_EUA` - Surgical mask [approved under EUA](https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas#surgicalmasks) but **not** FDA approved.
 * `SURGICAL_MASK_FDA` - Surgical mask that is FDA approved.

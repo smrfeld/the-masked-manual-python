@@ -1,11 +1,18 @@
 # The Masked Manual - Python backend
 
+This application lets you easily search for a face mask's qualifications from federal agencies in the U.S. Both surgical masks and respirators are supported.
+
+See also:
+* [The iOS app source](https://github.com/smrfeld/the-masked-manual-ios).
+* [About website](https://the-masked-manual.herokuapp.com).
+
 ## Google Cloud Storage Python interface
 
 [Documentation can be found here.](https://googleapis.dev/python/storage/latest/index.html)
 
 ## Flask
 
+Testing flask:
 ```
 export FLASK_APP=app
 export FLASK_ENV=development

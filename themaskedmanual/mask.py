@@ -366,6 +366,15 @@ def write_masks_to_file(masks: List[Mask]):
     for m in masks:
         data['masks'].append(m.to_json())
 
+    # Set some URLs
+    data['url_fda'] = "https://www.fda.gov/medical-devices/personal-protective-equipment-infection-control/n95-respirators-surgical-masks-and-face-masks"
+    data['url_niosh'] = "https://www.cdc.gov/niosh/npptl/topics/respirators/disp_part/default.html"
+    data['url_emergency'] = "https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas"
+    data['url_dev'] = "https://github.com/smrfeld/the-masked-manual-ios" 
+    data['url_data_fda'] = "https://open.fda.gov"
+    data['url_data_emergency'] = "https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas"
+    data['url_data_cdc'] = "https://www.cdc.gov/niosh/npptl/"
+
     fname = 'data_latest.txt'
     with open(fname,'w') as outfile:
         json.dump(data,outfile)

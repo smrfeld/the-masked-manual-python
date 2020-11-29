@@ -4,9 +4,18 @@ from datetime import date
 
 def upload_to_google_cloud_storage():
     
+    # Write JSON credentials
+    GCP_CRED = os.getenv('GCP_CRED')
+    if GCP_CRED == None:
+        print("Error! Could not get environment variable GCP_CRED to write to GCP. Set your service account JSON contents to this variable.")
+        return
+
+    fname = "service_account.json"
+    f = open(fname,'w')
+    f.write(GCP_CRED)
+    f.close()
+
     # Client
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    fname = os.path.join(dir_path, 'the-masked-manual-4a1f9306ddf1.json')
     client = storage.Client.from_service_account_json(fname)
 
     # Bucket

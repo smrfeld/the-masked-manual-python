@@ -1,5 +1,6 @@
 from google.cloud import storage
 import os
+from datetime import date
 
 def upload_to_google_cloud_storage():
     
@@ -21,5 +22,15 @@ def upload_to_google_cloud_storage():
 
     # Make public
     blob.make_public()
+
+    # Also upload and store with date
+    today = date.today()
+    d1 = today.strftime("%Y_%m_%d")
+    blob_date = bucket.blob('data_%s.txt' % d1)
+
+    # Upload
+    print("Uploading backup to google cloud storage....")
+    blob_date.upload_from_filename(filename='data_latest.txt')
+    print("Uploaded backup successfully.")
 
 

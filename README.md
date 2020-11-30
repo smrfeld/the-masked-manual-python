@@ -36,6 +36,17 @@ It will likely prompt for more options.
 
 ## Developer
 
+### To-do
+
+Currently, only N95 and surgical N95 respirators are indexed from the [complete list here](https://www.cdc.gov/niosh/npptl/topics/respirators/disp_part/default.html).
+TBD are:
+* N99
+* N100
+* R95
+* P95
+* P99
+* P100
+
 ### Google Cloud Storage Python interface
 
 [Documentation can be found here.](https://googleapis.dev/python/storage/latest/index.html)

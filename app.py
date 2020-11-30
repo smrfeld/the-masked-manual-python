@@ -20,7 +20,8 @@ def github():
 
 @app.route('/ios_app_store', methods=['GET'])
 def ios_app_store():
-    return render_template('index.html')
+    # return render_template('index.html')
+    return redirect("https://l.messenger.com/l.php?u=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fthe-masked-manual%2Fid1542536599&h=AT2vWkh8KhGXNJYLUQfl--uhjkSar2N01AN_ttA_Ri8_3oNhoqmDmw5RImuFlLpOap5gJMTlMDVTZcGke2GBfqVOzlaSWRORqEy5eTbV_YFcr6w32ofXb4uDQQUyLrN4iM_ILf49")
 
 @app.route('/data_latest', methods=['GET'])
 def data_latest():

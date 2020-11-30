@@ -4,7 +4,26 @@ This application lets you easily search for a face mask's qualifications from fe
 
 See also:
 * [The iOS app source](https://github.com/smrfeld/the-masked-manual-ios).
-* [About website](https://the-masked-manual.herokuapp.com).
+* [Application website](https://the-masked-manual.herokuapp.com).
+
+This is the Python backend for gathering the data. The data is gathered from:
+* [openFDA of the U.S. Food and Drug Administration (FDA)](https://open.fda.gov/).
+* [Emergency Use Authorizations for Medical Devices of the U.S. Food and Drug Administration (FDA)](https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas).
+* [National Personal Protective Technology Laboratory (NPPTL) of the Centers for Disease Control and Prevention (CDC)](https://www.cdc.gov/niosh/npptl/).
+
+You can [read about the data source permissions on the application website here](https://the-masked-manual.herokuapp.com).
+
+The list of currently indexed masks and respirators is below.
+
+A Heroku hosted application reloads the data periodically and hosts it online.
+
+## Running
+
+You can run the Python script:
+```
+python fetch_latest.py
+```
+It will likely prompt for more options.
 
 ## Mask and respirator types
 

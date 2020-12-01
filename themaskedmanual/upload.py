@@ -21,13 +21,12 @@ def upload_to_google_cloud_storage():
     # Bucket
     bucket = client.get_bucket('the-masked-manual-data')
 
-    # Blob
-    blob = bucket.blob('data_latest.txt')
-
     # Upload
-    print("Uploading to google cloud storage....")
-    blob.upload_from_filename(filename='data_latest.txt')
-    print("Uploaded successfully.")
+    blob = upload_file(
+        bucket=bucket,
+        fname_local='data_latest.txt',
+        fname_google='data_latest.txt'
+        )
 
     # Make public
     blob.make_public()
@@ -35,11 +34,29 @@ def upload_to_google_cloud_storage():
     # Also upload and store with date
     today = date.today()
     d1 = today.strftime("%Y_%m_%d")
-    blob_date = bucket.blob('data_%s.txt' % d1)
+    blob = upload_file(
+        bucket=bucket,
+        fname_local='data_latest.txt',
+        fname_google='data_%s.txt' % d1
+        )
+    
+    # Upload cache
+    fname_local = "cache.tar.gz"
+    os.system('tar -czf %s cache' % fname_local)
+    blob = upload_file(
+        bucket=bucket,
+        fname_local=fname_local,
+        fname_google='cache_%s.tar.gz' % d1
+        )
+
+def upload_file(bucket : storage.bucket, fname_local : str, fname_google : str) -> storage.blob:
+    print("Uploading: %s to google cloud storage: %s ...." % (fname_local, fname_google))
+
+    # Blob
+    blob = bucket.blob(fname_google)
 
     # Upload
-    print("Uploading backup to google cloud storage....")
-    blob_date.upload_from_filename(filename='data_latest.txt')
-    print("Uploaded backup successfully.")
+    blob.upload_from_filename(filename=fname_local)
+    print("Uploaded successfully: %s to %s." % (fname_local, fname_google))
 
-
+    return blob

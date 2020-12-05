@@ -2,6 +2,8 @@
 
 This application lets you easily search for a face mask's qualifications from federal agencies in the U.S. Both surgical masks and respirators are supported.
 
+<img src="static/logo_social_media.png" alt="drawing" width="400"/>
+
 See also:
 * [The iOS app source](https://github.com/smrfeld/the-masked-manual-ios).
 * [Application website](https://the-masked-manual.herokuapp.com).
@@ -36,7 +38,7 @@ It will likely prompt for more options.
 
 ## Developer
 
-### Website mockups
+### iOS mockups for website
 
 Courtesy of [smartmockups](https://smartmockups.com/mockup/iphone-11-pro-in-4-colors-h98h3GkI8T).
 

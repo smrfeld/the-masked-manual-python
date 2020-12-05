@@ -1,50 +1,138 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
 
-{% block content %}
-    
-{% block title %} 
-<h1> The Masked Manual iOS app </h1> 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Brand</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
 
-<p>
-This application lets you easily search for a face mask's qualifications from federal agencies in the U.S. Both surgical masks and respirators are supported.
-</p>
+<body id="page-top" style="background-color: rgb(255,255,255);">
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top" id="mainNav" style="background-color: rgba(0,0,0,0.5);color: rgb(255,255,255);">
+        <div class="container"><a class="navbar-brand js-scroll-trigger" href="/#page-top">The Masked Manual</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler float-right" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+            <div
+                class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="/#download">Download</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="/#features">Features</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="/#contribute">Contribute</a></li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <header class="masthead mysection">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-7 my-auto">
+                    <div class="mx-auto header-content">
+                        <h1 class="mb-5">The Masked Manual is a free &amp; open source app that puts surgical mask and respirator data in your pocket.</h1>
+                    </div>
+                </div>
+                <div class="col-lg-5 my-auto">
+                    <div class="device-container">
+                        <div class="device-mockup iphone6_plus portrait white">
+                            <div class="device" style="background-image: url(&quot;assets/img/smartmockups_kiava5ke.png&quot;);">
+                                <div class="screen"></div>
+                                <div class="button"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="iphone-mockup"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section id="download" class="download text-center mysection">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <h2 class="section-heading" style="color: rgb(252,252,252);">Download from the app store</h2>
+                    <p style="color: rgb(0,0,0);">Available for iOS only.</p>
+                    <div class="badges"><a class="badge-link" href="#"></a><a class="badge-link" href="https://apps.apple.com/us/app/the-masked-manual/id1542536599"><img src="assets/img/app-store-badge.svg"></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="features" class="features mysection">
+        <div class="container">
+            <div class="section-heading text-center">
+                <h2 style="color: rgb(255,255,255);">Features</h2>
+                <p style="color: rgb(0,0,0);">Information on surgical masks and respirators.</p>
+                <hr>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 my-auto">
+                    <div class="device-container">
+                        <div class="device-mockup iphone6_plus portrait white">
+                            <div class="device" style="background-image: url(&quot;assets/img/smartmockups_kiawec2c.png&quot;);">
+                                <div class="screen"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 my-auto">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="feature-item"><i class="fa fa-signal bg-white" style="filter: grayscale(100%);"></i>
+                                    <h3 style="color: rgb(255,255,255);">2000+ masks</h3>
+                                    <p style="color: rgb(0,0,0);">Including NIOSH approved N95 respirators, FDA approved surgical masks, and masks authorized by the FDA for emergency usage during COVID-19.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="feature-item"><i class="icon-camera text-primary" style="filter: grayscale(100%);"></i>
+                                    <h3 style="color: rgb(255,255,255);">Scan to search quickly</h3>
+                                    <p>Image recognition helps quickly locate masks from their packaging.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="feature-item"><i class="icon-basket-loaded text-primary" style="filter: grayscale(100%);"></i>
+                                    <h3 style="color: rgb(255,255,255);">Make the choice to stay safe</h3>
+                                    <p style="color: rgb(0,0,0);">Easily compare mask qualifications and safety information.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="feature-item"><i class="icon-lock-open text-primary" style="filter: grayscale(100%);"></i>
+                                    <h3 style="color: rgb(255,255,255);">Open source</h3>
+                                    <p style="color: rgb(0,0,0);">MIT licensed, contributions welcome.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contribute" class="contact bg-primary mysection">
+        <div class="container">
+            <h2><span style="color: rgb(255,255,255);">Developer? Contribute on GitHub</span></h2>
+            <ul class="list-inline list-social">
+                <li class="list-inline-item social-twitter"><a href="https://github.com/smrfeld/the-masked-manual-ios" style="background-color: rgb(0,0,0);"><i class="fa fa-github"></i></a></li>
+                <li class="list-inline-item social-facebook"></li>
+            </ul>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <p>©&nbsp;The Masked Manual 2020. Released under open source MIT license.</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="privacy_policy">Privacy</a></li>
+                <li class="list-inline-item"><a href="terms_and_conditions">Terms</a></li>
+                <li class="list-inline-item"></li>
+            </ul>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+</body>
 
-<p>
-<img src="{{ url_for('static', filename= 'screenshots.png') }}" alt="screenshots" style="width:100%; max-width:800px;"/>
-</p>
-
-<p>
-    The source for each data is listed explicitly in the application for each mask or respirator entry. Data are sourced from:
-    <ul>
-        <li><a href="https://open.fda.gov">openFDA of the U.S. Food and Drug Administration (FDA)</a></li>
-        <li><a href="https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas">Emergency Use Authorizations for Medical Devices of the U.S. Food and Drug Administration (FDA)</a></li>
-        <li><a href="https://www.cdc.gov/niosh/npptl/">National Personal Protective Technology Laboratory (NPPTL) of the Centers for Disease Control and Prevention (CDC)</a></il>
-    </ul>
-</p>
-
-<p>
-    The substantive content of the materials has not been changed from their original sources.
-</p>
-
-<p>
-    The material is otherwise available on the respective agency website for no charge.
-</p>
-
-<p>
-    The terms of service for all data follow from their source as indicated for each entry for a mask. Data from openFDA is available under Creative Commons CC0 1.0 Universal dedication (timestamp: 11/28/2020). Data from the CDC provided here is not under copyright and is in the public domain (timestamp: 11/28/2020). Data from the FDA provided here is not under copyright and is in the public domain (timestamp: 11/28/2020).
-</p>
-
-<p>
-    See also the <a href="terms_and_conditions">terms and conditions</a>.
-</p>
-
-<h2>Developer?</h2>
-
-<p>
-This is an open source project. Contribute on our <a href="https://github.com/smrfeld/the-masked-manual-python">GitHub</a>.
-</p>
-
-
-{% endblock %}
-
-{% endblock %}
+</html>

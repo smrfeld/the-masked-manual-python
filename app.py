@@ -1,6 +1,8 @@
 from flask import Flask, redirect, render_template
 
-app = Flask(__name__)
+STATIC_FOLDER = 'templates/assets'
+app = Flask(__name__,
+            static_folder=STATIC_FOLDER)
 
 @app.route('/', methods=['GET'])
 def index():
